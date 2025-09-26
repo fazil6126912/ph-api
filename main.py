@@ -1,5 +1,5 @@
 # filename: main.py
-# Purpose: Extract date, provider_name, doc_type, title, description from a medical PDF/JPG/PNG.
+# Purpose: Extract event_data, provider_name, type, title, description from a medical PDF/JPG/PNG.
 # Returns None for any field that is missing.
 
 import os
@@ -26,15 +26,15 @@ except Exception:
 
 
 class DocMetadata(BaseModel):
-    date: Optional[str] = Field(
+    event_data: Optional[str] = Field(
         default=None,
-        description="Document date in ISO YYYY-MM-DD if determinable; else null."
+        description="Document event_data in ISO YYYY-MM-DD if determinable; else null."
     )
     provider_name: Optional[str] = Field(
         default=None,
         description="Hospital/clinic/lab/provider name as written; else null."
     )
-    doc_type: Optional[str] = Field(
+    type: Optional[str] = Field(
         default=None,
         description="One of PRESCRIPTION, LAB_REPORT, or OTHER if determinable; else null."
     )
@@ -129,9 +129,9 @@ def extract_doc_metadata(
         "Task: Extract metadata from the provided medical document.\n"
         "- Return a JSON object matching the schema fields exactly.\n"
         "- If a field is not present or cannot be determined, return null for that field.\n"
-        "- date: Prefer an explicit written date; normalize to ISO YYYY-MM-DD if clear; else null.\n"
+        "- event_data: Prefer an explicit written event_data; normalize to ISO YYYY-MM-DD if clear; else null.\n"
         "- provider_name: Hospital/clinic/lab/provider name as written; avoid guessing; else null.\n"
-        "- doc_type: Use PRESCRIPTION, LAB_REPORT, or OTHER; if unclear, null.\n"
+        "- type: Use PRESCRIPTION, LAB_REPORT, or OTHER; if unclear, null.\n"
         "- title: A concise half-line title; if not obvious, null.\n"
         "- description: A factual 2–3 line summary; if insufficient info, null.\n"
         "Avoid hallucinations; do not infer missing values beyond the document."
